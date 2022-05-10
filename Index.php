@@ -1,12 +1,6 @@
 <?php
-$conection = new mysqli("localhost", "desarrollador", "adsi2017", "citas");
-if( $conection->connect_errno) {
-    echo "Falla al conectarse a Mysql ( ". $conn->connect_errno . ") " .
-    $conection->connect_error ;
-    exit() ;
-};
+ include_once('connection.php');
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -27,33 +21,19 @@ if( $conection->connect_errno) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   </head>
   <body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-            </a>
-        </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a href="/citas/" class="navbar-item">
-                    Listar
-                </a>
-
-                <a href="/citas/crear.php"class="navbar-item">
-                    Crear
-                </a>
-            </div>
-        </div>
-    </nav>
+  <?php include_once('menu.php') ?>
 
     <section class="section">
-        <h1 class="title">Listar pacientes</h1>
+        <h1 class="title">Gestionar pacientes</h1>
         <h2 class="subtitle">
-            Estos son los pacientes registrados en el sistema.
+            Pacientes registrados en el sistema.
         </h2>
 
-        <table class="table">
+        <a href="/citas/create.php" class="button is-info">Agregar nuevo</a>
+        <br><br>
+
+        <table class="table is-fullwidth">
             <thead>
                 <tr>
                     <th>Documento</th>
@@ -61,6 +41,8 @@ if( $conection->connect_errno) {
                     <th>Apellidos</th>
                     <th>Fecha</th>
                     <th>Sexo</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +56,16 @@ if( $conection->connect_errno) {
                        <td><?php echo $paciente['PacApellidos']; ?></td>
                        <td><?php echo $paciente['PacFechaNacimiento']; ?></td>
                         <td><?php echo $paciente['PacSexo']; ?></td>
+                        <td>
+                             <a href="/citas/edit.php?doc=<?php echo $paciente['PacIdentificacion'] ?>"> Editar</a>
+                        </td>
+                        <td>
+                            <form
+                                action="/citas/delete.php" method="post">
+                                <input type="hidden" name="identificador" value="<?php echo $paciente['PacIdentificacion']; ?>">
+                                <button type="submit" class="button is-danger">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php
                     };
